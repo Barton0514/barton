@@ -97,7 +97,7 @@ export const mockBooks: Book[] = [
     title: '悉达多',
     author: '赫尔曼·黑塞',
     category: 'philosophy',
-    description: '一部探索自我、寻求真理的经典之作。讲述了古印度贵族青年悉达多，为了追寻内心的宁静与智慧，历经婆罗门、沙门、富商、船夫等多种身份，最终在河边顿悟的故事。',
+    description: '一部探索自我、寻求真理的经典之作。讲述了古印度贵族青年悉达多，为了追寻内心的宁静与智慧，历经多种身份，最终在河边顿悟的故事。',
     cover: 'https://images.pexels.com/photos/2098624/pexels-photo-2098624.jpeg?auto=compress&cs=tinysrgb&w=400',
     rating: 4.8,
     publishYear: 1922,
@@ -105,7 +105,7 @@ export const mockBooks: Book[] = [
     isbn: '978-7-5442-7360-3',
     tags: ['哲学', '灵性', '自我发现', '经典文学'],
     authorBio: '赫尔曼·黑塞（Hermann Hesse），德国作家、诗人，1946年诺贝尔文学奖得主，是20世纪最伟大的文学家之一。',
-    tableOfContents: ['第一部：婆罗门之子', '第一部：与沙门同行', '第一部：乔达摩', '第一部：觉醒', '第二部：迦摩罗', '第二部：与俗人在一起', '第二部：轮回', '第二部：在河边', '第二部：船夫', '第二部：儿子', '第二部：唵', '第二部：乔文达'],
+    tableOfContents: ['第一部', '第二部'],
     difyChatUrl: 'https://dify.nihilityfzero.top:23580/chat/JTJniPPDAuZ99Tox'
   }
 ];
