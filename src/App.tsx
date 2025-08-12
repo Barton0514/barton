@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Book, SearchFilters } from './types';
 import { AuthProvider } from './context/AuthContext';
 import { useBooks } from './hooks/useBooks';
