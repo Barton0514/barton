@@ -90,7 +90,7 @@ const BookList: React.FC<BookListProps> = ({
 
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors text-gray-700"
         >
           <SlidersHorizontal className="h-4 w-4" />
           <span>筛选器</span>

@@ -105,7 +105,7 @@ const BookCard: React.FC<BookCardProps> = ({
 
   return (
     <div
-      className="relative bg-brand-secondary/80 rounded-2xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group border border-white/10 backdrop-blur-sm"
+      className="relative bg-white rounded-2xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group border border-gray-100"
       onClick={() => onDetailsClick(book)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -138,10 +138,10 @@ const BookCard: React.FC<BookCardProps> = ({
         </div>
         
         <div className="p-6">
-          <h3 className="text-lg font-bold text-brand-primary mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
             {book.title}
           </h3>
-          <p className="text-sm text-brand-muted mb-3">作者：{book.author}</p>
+          <p className="text-sm text-gray-600 mb-3">作者：{book.author}</p>
           <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 mb-4">
             {book.description}
           </p>
@@ -149,7 +149,7 @@ const BookCard: React.FC<BookCardProps> = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-1">
               <Star className="h-4 w-4 text-yellow-400 fill-current" />
-              <span className="text-sm font-medium text-gray-700">{book.rating}</span>
+              <span className="text-sm font-medium text-gray-900">{book.rating}</span>
             </div>
             <div className="flex items-center space-x-3 text-xs text-gray-500">
               <span>{book.publishYear}年</span>
@@ -170,7 +170,7 @@ const BookCard: React.FC<BookCardProps> = ({
           
           <button
             onClick={handleChatClick}
-            className="w-full bg-brand-primary hover:bg-gray-800 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-2"
+            className="w-full bg-brand-primary text-white hover:bg-gray-800 transition-colors py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
           >
             <MessageCircle className="h-4 w-4" />
             <span>与作者对话</span>
