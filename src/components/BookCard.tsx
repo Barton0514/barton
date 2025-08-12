@@ -17,11 +17,7 @@ interface BookCardProps {
 const BookCard: React.FC<BookCardProps> = ({ book, viewMode, isFavorite, onToggleFavorite, onChatClick, onDetailsClick }) => {
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (book.difyChatUrl) {
-      window.open(book.difyChatUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      onChatClick(book);
-    }
+    onChatClick(book); // 直接调用从 props 传来的 onChatClick 即可
   };
   
   const handleFavoriteClick = (e: React.MouseEvent) => {

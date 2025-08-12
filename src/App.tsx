@@ -10,8 +10,9 @@ import ChatInterface from './components/ChatInterface';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import UserProfile from './components/UserProfile';
+import DifyChat from './components/DifyChat';
 
-type ViewMode = 'list' | 'detail' | 'chat';
+type ViewMode = 'list' | 'detail' | 'chat' | 'difyChat';
 type Theme = 'light' | 'dark';
 
 function AppContent() {
@@ -49,7 +50,11 @@ function AppContent() {
 
   const handleChatClick = (book: Book) => {
     setSelectedBook(book);
-    setViewMode('chat');
+    if (book.difyChatUrl) {
+      setViewMode('difyChat'); // 如果有 difyUrl，切换到 difyChat 视图
+    } else {
+      setViewMode('chat'); // 否则，使用内置聊天
+    }
   };
 
   const handleBackToList = () => {
@@ -139,6 +144,19 @@ function AppContent() {
               onBack={handleBackToList}
               onChatClick={handleChatClick}
             />
+          </motion.div>
+        )}
+
+        {viewMode === 'difyChat' && selectedBook && selectedBook.difyChatUrl && (
+          <motion.div
+            key="difyChat"
+            initial="initial" 
+            animate="in" 
+            exit="out" 
+            variants={pageVariants}
+            transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+          >
+            <DifyChat difyUrl={selectedBook.difyChatUrl} onBack={handleBackToList} />
           </motion.div>
         )}
 
