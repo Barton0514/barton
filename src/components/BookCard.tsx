@@ -37,77 +37,51 @@ const BookCard: React.FC<BookCardProps> = ({
   if (viewMode === 'list') {
     return (
       <div 
-        className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-transparent hover:border-brand-accent/50"
+        className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-transparent hover:border-brand-accent/50 group"
         onClick={() => onDetailsClick(book)}
       >
-        <div className="flex p-6">
-          <div className="flex-shrink-0">
-            <img
-              src={book.cover}
-              alt={book.title}
-              className="w-24 h-32 object-cover rounded-lg shadow-sm"
-            />
+        <div className="flex items-center p-4">
+          <img
+            src={book.cover}
+            alt={book.title}
+            className="w-20 h-28 object-cover rounded-md shadow-sm flex-shrink-0"
+          />
+          <div className="ml-5 flex-1">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2">
+              {categoryLabels[book.category]}
+            </span>
+            <h3 className="text-lg font-bold text-brand-primary group-hover:text-blue-600 transition-colors line-clamp-1">
+              {book.title}
+            </h3>
+            <p className="text-sm text-brand-muted mt-1">作者：{book.author}</p>
+            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                <span>{book.rating}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Calendar className="h-4 w-4" />
+                <span>{book.publishYear}年</span>
+              </div>
+            </div>
           </div>
-          <div className="ml-6 flex-1">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-brand-primary mb-2 hover:text-blue-600 transition-colors">
-                  {book.title}
-                </h3>
-                <p className="text-sm text-brand-muted mb-2">作者：{book.author}</p>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-3">
-                  {categoryLabels[book.category]}
-                </span>
-                <p className="text-gray-700 text-sm leading-relaxed line-clamp-2">
-                  {book.description}
-                </p>
-              </div>
-              <div className="ml-4 flex flex-col items-end space-y-2">
-                <button
-                  onClick={handleFavoriteClick}
-                  className={`p-2 rounded-full transition-colors ${
-                    isFavorite 
-                      ? 'text-red-500 hover:text-red-600' 
-                      : 'text-gray-400 hover:text-red-500'
-                  }`}
-                >
-                  <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
-                </button>
-                <button
-                  onClick={handleChatClick}
-                  className="bg-brand-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>对话</span>
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                  <span>{book.rating}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{book.publishYear}年</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <BookOpen className="h-4 w-4" />
-                  <span>{book.pages}页</span>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {book.tags.slice(0, 3).map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+          <div className="ml-4 flex flex-col items-center justify-center space-y-3">
+            <button
+              onClick={handleFavoriteClick}
+              className={`p-2 rounded-full transition-colors ${
+                isFavorite 
+                  ? 'text-red-500 bg-red-100' 
+                  : 'text-gray-400 hover:bg-gray-100 hover:text-red-500'
+              }`}
+            >
+              <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
+            </button>
+            <button
+              onClick={handleChatClick}
+              className="p-2 rounded-full text-gray-400 hover:bg-gray-100 hover:text-brand-primary transition-colors"
+            >
+              <MessageCircle className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </div>

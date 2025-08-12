@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, LogOut, Menu, X } from 'lucide-react';
+import { Search, User, LogOut, Menu, X, Bookmark } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">BC</span>
+                <Bookmark className="text-white h-5 w-5" />
               </div>
               <h1 className="ml-3 text-xl font-bold text-gray-900 hidden sm:block">
                 书籍作者对话

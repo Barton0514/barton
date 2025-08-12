@@ -162,7 +162,7 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
           </nav>
         </div>
 
-        <div className="p-8">
+        <div className="p-8 animate-fade-in">
           {activeTab === 'overview' && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">书籍概述</h2>
@@ -215,7 +215,7 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">关于作者</h2>
               <div className="flex items-start space-x-6">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                <div className="w-24 h-24 bg-brand-secondary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                   {book.author.charAt(0)}
                 </div>
                 <div className="flex-1">
