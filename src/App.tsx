@@ -21,7 +21,7 @@ function AppContent() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({ query: '' });
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -97,8 +97,15 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AnimatePresence>
+    <div className="min-h-screen">
+      <Header 
+        onSearchChange={handleSearchChange}
+        onLoginClick={() => setShowLoginForm(true)}
+        onRegisterClick={() => setShowRegisterForm(true)}
+        theme={theme}
+        onThemeChange={setTheme}
+      />
+      <AnimatePresence mode="wait">
         {viewMode === 'list' && (
           <motion.div
             key="list"
@@ -108,31 +115,13 @@ function AppContent() {
             variants={pageVariants}
             transition={{ duration: 0.3 }}
           >
-            <Header 
-              onSearchChange={handleSearchChange}
-              onLoginClick={() => setShowLoginForm(true)}
-              onRegisterClick={() => setShowRegisterForm(true)}
-              theme={theme}
-              onThemeChange={setTheme}
+            <BookList
+              books={books}
+              onChatClick={handleChatClick}
+              onDetailsClick={handleBookDetails}
+              searchFilters={searchFilters}
+              onFiltersChange={setSearchFilters}
             />
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              <div className="text-center p-8 mb-8 rounded-2xl">
-                <h1 className="text-5xl font-extrabold text-brand-primary mb-3">
-                  与书籍作者对话
-                </h1>
-                <p className="text-xl text-brand-muted">
-                  探索知识的深度，与大师级思想家进行虚拟对话
-                </p>
-              </div>
-              
-              <BookList
-                books={books}
-                onChatClick={handleChatClick}
-                onDetailsClick={handleBookDetails}
-                searchFilters={searchFilters}
-                onFiltersChange={setSearchFilters}
-              />
-            </main>
           </motion.div>
         )}
 
