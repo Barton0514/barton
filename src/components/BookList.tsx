@@ -45,31 +45,30 @@ const BookList: React.FC<BookListProps> = ({ books, onChatClick, onDetailsClick,
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <div className="text-center pt-8">
-        <h1 className="text-5xl font-extrabold text-white mb-3 tracking-tight">与书籍作者对话</h1>
-        <p className="text-xl text-brand-muted">探索知识的深度，与大师级思想家进行虚拟对话</p>
+        <h1 className="text-5xl font-extrabold text-brand-text-primary mb-3 tracking-tight">与书籍作者对话</h1>
+        <p className="text-xl text-brand-text-secondary">探索知识的深度，与大师级思想家进行虚拟对话</p>
       </div>
 
-      <div className="sticky top-[70px] z-40 bg-brand-primary/80 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-lg">
+      <div className="bg-brand-surface backdrop-blur-md p-4 rounded-xl border border-brand-border">
         <div className="flex justify-between items-center">
-          <p className="text-brand-muted text-sm">共找到 <span className="font-semibold text-white">{filteredBooks.length}</span> 本书</p>
+          <p className="text-sm text-brand-text-secondary">共找到 <span className="font-semibold text-brand-text-primary">{filteredBooks.length}</span> 本书</p>
           <div className="flex items-center gap-2">
-            <button onClick={() => setViewMode('grid')} className={clsx('p-2 rounded-lg', viewMode === 'grid' ? 'bg-brand-accent text-brand-primary' : 'hover:bg-white/10')}><Grid size={20} /></button>
-            <button onClick={() => setViewMode('list')} className={clsx('p-2 rounded-lg', viewMode === 'list' ? 'bg-brand-accent text-brand-primary' : 'hover:bg-white/10')}><List size={20} /></button>
-            <button onClick={() => setShowFilters(!showFilters)} className={clsx('p-2 rounded-lg', showFilters ? 'bg-white/20' : 'hover:bg-white/10')}><SlidersHorizontal size={20} /></button>
+            <button onClick={() => setViewMode('grid')} className={clsx('p-2 rounded-lg transition-colors', viewMode === 'grid' ? 'bg-brand-accent text-white' : 'hover:bg-white/10')}><Grid size={20} /></button>
+            <button onClick={() => setViewMode('list')} className={clsx('p-2 rounded-lg transition-colors', viewMode === 'list' ? 'bg-brand-accent text-white' : 'hover:bg-white/10')}><List size={20} /></button>
+            <button onClick={() => setShowFilters(!showFilters)} className={clsx('p-2 rounded-lg transition-colors', showFilters ? 'bg-white/20' : 'hover:bg-white/10')}><SlidersHorizontal size={20} /></button>
           </div>
         </div>
       </div>
       
       {showFilters && (
-        <div className="p-6 bg-brand-secondary/80 backdrop-blur-md rounded-2xl border border-white/10">
-           <p className="text-center text-brand-muted">筛选器功能区域。</p>
+        <div className="p-6 bg-brand-surface backdrop-blur-md rounded-xl border border-brand-border">
+           <p className="text-center text-brand-text-secondary">筛选器功能区域。</p>
         </div>
       )}
 
       <div className={clsx(
-        'transition-opacity duration-500',
         viewMode === 'grid'
-          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           : "flex flex-col gap-4"
       )}>
         {filteredBooks.map(book => (

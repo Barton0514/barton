@@ -4,10 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'brand-primary': '#0D1B2A', // 深海军蓝，用于标题和主元素
-        'brand-secondary': '#1B263B', // 略浅的蓝色，用于卡片背景
-        'brand-accent': '#FFD700', // 金色，用于高亮和按钮
-        'brand-muted': '#A9B4C2', // 柔和的灰色，用于次要文本
+        'brand-bg': '#0a101f', // 更深邃的背景
+        'brand-bg-light': '#004e92', // 用于渐变
+        'brand-surface': 'rgba(21, 26, 48, 0.7)', // 卡片和弹窗背景，带一点蓝色调
+        'brand-border': 'rgba(255, 255, 255, 0.1)', // 边框颜色
+        'brand-text-primary': '#f8f9fa', // 主要文字颜色（纯白略灰）
+        'brand-text-secondary': '#adb5bd', // 次要文字颜色
+        'brand-accent': '#007bff', // 唯一的强调色/按钮背景
+        'brand-accent-hover': '#0056b3', // 按钮悬浮
       },
       boxShadow: {
         'subtle': '0 4px 12px rgba(0, 0, 0, 0.05)',
