@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Book, SearchFilters } from './types';
 import { AuthProvider } from './context/AuthContext';
 import { useBooks } from './hooks/useBooks';
@@ -11,6 +11,7 @@ import RegisterForm from './components/RegisterForm';
 import UserProfile from './components/UserProfile';
 
 type ViewMode = 'list' | 'detail' | 'chat';
+type Theme = 'light' | 'dark';
 
 function AppContent() {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -19,6 +20,15 @@ function AppContent() {
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({ query: '' });
+  const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   const { books, loading, error } = useBooks();
 
@@ -78,6 +88,8 @@ function AppContent() {
             onSearchChange={handleSearchChange}
             onLoginClick={() => setShowLoginForm(true)}
             onRegisterClick={() => setShowRegisterForm(true)}
+            theme={theme}
+            onThemeChange={setTheme}
           />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center p-8 mb-8 rounded-2xl">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Star, Heart, MessageCircle, Calendar, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Star, Heart, MessageCircle } from 'lucide-react';
 import { Book } from '../types';
 import { categoryLabels } from '../data/mockData';
 
@@ -20,21 +21,6 @@ const BookCard: React.FC<BookCardProps> = ({
   onDetailsClick,
   viewMode = 'grid'
 }) => {
-  const [spotlightStyle, setSpotlightStyle] = useState<React.CSSProperties>({});
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setSpotlightStyle({
-      background: `radial-gradient(circle at ${x}px ${y}px, rgba(255,215,0,0.15), transparent 20%)`
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setSpotlightStyle({});
-  };
-
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggleFavorite?.(book.id);
@@ -52,7 +38,7 @@ const BookCard: React.FC<BookCardProps> = ({
   if (viewMode === 'list') {
     return (
       <div 
-        className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-transparent hover:border-brand-accent/50 group"
+        className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-transparent hover:border-brand-accent/50 group dark:bg-brand-secondary/80 dark:border-white/10"
         onClick={() => onDetailsClick(book)}
       >
         <div className="flex items-center p-4">
@@ -62,20 +48,19 @@ const BookCard: React.FC<BookCardProps> = ({
             className="w-20 h-28 object-cover rounded-md shadow-sm flex-shrink-0"
           />
           <div className="ml-5 flex-1">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2 dark:bg-blue-900/30 dark:text-blue-200">
               {categoryLabels[book.category]}
             </span>
-            <h3 className="text-lg font-bold text-brand-primary group-hover:text-blue-600 transition-colors line-clamp-1">
+            <h3 className="text-lg font-bold text-brand-primary group-hover:text-blue-600 transition-colors line-clamp-1 dark:text-white dark:group-hover:text-blue-300">
               {book.title}
             </h3>
-            <p className="text-sm text-brand-muted mt-1">作者：{book.author}</p>
-            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+            <p className="text-sm text-brand-muted mt-1 dark:text-gray-300">作者：{book.author}</p>
+            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center space-x-1">
                 <Star className="h-4 w-4 text-yellow-400 fill-current" />
                 <span>{book.rating}</span>
               </div>
               <div className="flex items-center space-x-1">
-                <Calendar className="h-4 w-4" />
                 <span>{book.publishYear}年</span>
               </div>
             </div>
@@ -85,15 +70,15 @@ const BookCard: React.FC<BookCardProps> = ({
               onClick={handleFavoriteClick}
               className={`p-2 rounded-full transition-colors ${
                 isFavorite 
-                  ? 'text-red-500 bg-red-100' 
-                  : 'text-gray-400 hover:bg-gray-100 hover:text-red-500'
+                  ? 'text-red-500 bg-red-100 dark:bg-red-900/30' 
+                  : 'text-gray-400 hover:bg-gray-100 hover:text-red-500 dark:hover:bg-gray-700'
               }`}
             >
               <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
             </button>
             <button
               onClick={handleChatClick}
-              className="p-2 rounded-full text-gray-400 hover:bg-gray-100 hover:text-brand-primary transition-colors"
+              className="p-2 rounded-full text-gray-400 hover:bg-gray-100 hover:text-brand-primary transition-colors dark:hover:bg-gray-700 dark:text-gray-300 dark:hover:text-white"
             >
               <MessageCircle className="h-5 w-5" />
             </button>
@@ -104,80 +89,49 @@ const BookCard: React.FC<BookCardProps> = ({
   }
 
   return (
-    <div
-      className="relative bg-white rounded-2xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group border border-gray-100"
+    <motion.div
       onClick={() => onDetailsClick(book)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      className="relative w-full cursor-pointer group"
+      whileHover="hover"
+      style={{ perspective: 800 }}
     >
-      <div style={spotlightStyle} className="absolute inset-0 z-0"></div>
-      <div className="relative z-10">
-        <div className="relative">
-          <img
-            src={book.cover}
-            alt={book.title}
-            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+      <motion.div
+        className="relative w-full h-full p-1 rounded-2xl bg-gradient-to-br from-white/20 to-transparent"
+        style={{ transformStyle: 'preserve-3d' }}
+        variants={{ hover: { scale: 1.02 } }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        {/* The Glowing Border */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl"
+          style={{
+            background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(255, 215, 0, 0.4), transparent 40%)`,
+            transform: 'translateZ(-10px)',
+          }}
+          variants={{ hover: { opacity: 1, scale: 1.05 } }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* The Card Content */}
+        <div className="relative w-full h-full bg-brand-secondary/90 backdrop-blur-md rounded-xl shadow-lg p-5 border border-white/10 dark:bg-brand-secondary/80">
+          <img 
+            src={book.cover} 
+            alt={book.title} 
+            className="w-full h-56 object-cover rounded-lg mb-4 shadow-md"
           />
-          <div className="absolute top-3 right-3 flex space-x-2">
-            <button
-              onClick={handleFavoriteClick}
-              className={`p-2 rounded-full bg-white/90 backdrop-blur-sm transition-colors shadow-sm ${
-                isFavorite 
-                  ? 'text-red-500 hover:text-red-600' 
-                  : 'text-gray-600 hover:text-red-500'
-              }`}
-            >
-              <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
-            </button>
-          </div>
-          <div className="absolute top-3 left-3">
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white/90 text-blue-800 backdrop-blur-sm">
-              {categoryLabels[book.category]}
-            </span>
-          </div>
-        </div>
-        
-        <div className="p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
-            {book.title}
-          </h3>
-          <p className="text-sm text-gray-600 mb-3">作者：{book.author}</p>
-          <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 mb-4">
-            {book.description}
-          </p>
-          
-          <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-white mb-1 truncate">{book.title}</h3>
+          <p className="text-sm text-brand-muted mb-3">作者: {book.author}</p>
+          <div className="flex justify-between items-center text-sm text-brand-muted">
             <div className="flex items-center space-x-1">
-              <Star className="h-4 w-4 text-yellow-400 fill-current" />
-              <span className="text-sm font-medium text-gray-900">{book.rating}</span>
+              <Star className="h-4 w-4 text-brand-accent fill-current"/>
+              <span>{book.rating}</span>
             </div>
-            <div className="flex items-center space-x-3 text-xs text-gray-500">
-              <span>{book.publishYear}年</span>
-              <span>{book.pages}页</span>
-            </div>
+            <span>{book.publishYear}年</span>
           </div>
-          
-          <div className="flex flex-wrap gap-1 mb-4">
-            {book.tags.slice(0, 3).map((tag, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          
-          <button
-            onClick={handleChatClick}
-            className="w-full bg-brand-primary text-white hover:bg-gray-800 transition-colors py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center space-x-2"
-          >
-            <MessageCircle className="h-4 w-4" />
-            <span>与作者对话</span>
-          </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
