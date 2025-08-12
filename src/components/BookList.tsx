@@ -127,9 +127,10 @@ export interface SearchFilters {
 
 export type ViewMode = 'grid' | 'list';
 import React, { useState, useMemo } from 'react';
-import { Grid, List, SlidersHorizontal } from 'lucide-react';
+import { Grid, List, SlidersHorizontal, Filter } from 'lucide-react';
 import clsx from 'clsx';
-import { Book, SearchFilters, ViewMode } from '../types';
+import { Book, SearchFilters, ViewMode, Category } from '../types';
+import { categoryLabels } from '../data/mockData';
 import BookCard from './BookCard';
 import { useAuth } from '../context/AuthContext';
 
@@ -144,6 +145,7 @@ interface BookListProps {
 const BookList: React.FC<BookListProps> = ({ books, onChatClick, onDetailsClick, searchFilters, onFiltersChange }) => {
   const { user, updateUser } = useAuth();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [showFilters, setShowFilters] = useState(false);
   
   const favoriteBooks = user?.favoriteBooks || [];
 
@@ -159,7 +161,7 @@ const BookList: React.FC<BookListProps> = ({ books, onChatClick, onDetailsClick,
 
   const filteredBooks = useMemo(() => {
     return books.filter(book => {
-      const matchesQuery = !searchFilters.query || 
+      const matchesQuery = !searchFilters.query ||
         book.title.toLowerCase().includes(searchFilters.query.toLowerCase()) ||
         book.author.toLowerCase().includes(searchFilters.query.toLowerCase());
       const matchesCategory = !searchFilters.category || book.category === searchFilters.category;
@@ -167,36 +169,78 @@ const BookList: React.FC<BookListProps> = ({ books, onChatClick, onDetailsClick,
     });
   }, [books, searchFilters]);
 
+  const categories: Category[] = [
+    'literature', 'technology', 'history', 'science', 
+    'philosophy', 'biography', 'fiction', 'business'
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Hero Section */}
-      <div className="text-center">
-        <h1 className="text-5xl font-extrabold text-white mb-3">与书籍作者对话</h1>
-        <p className="text-xl text-gray-400">探索知识的深度，与大师级思想家进行虚拟对话</p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="text-center pt-8">
+        <h1 className="text-5xl font-extrabold text-white mb-3 tracking-tight">与书籍作者对话</h1>
+        <p className="text-xl text-brand-muted">探索知识的深度，与大师级思想家进行虚拟对话</p>
       </div>
       
-      {/* Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-4 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-white/10">
-        <p className="text-gray-400">共找到 <span className="font-semibold text-white">{filteredBooks.length}</span> 本书籍</p>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setViewMode('grid')} className={clsx('p-2 rounded-lg', viewMode === 'grid' ? 'bg-blue-500 text-black' : 'hover:bg-white/10')}><Grid /></button>
-          <button onClick={() => setViewMode('list')} className={clsx('p-2 rounded-lg', viewMode === 'list' ? 'bg-blue-500 text-black' : 'hover:bg-white/10')}><List /></button>
-          <button onClick={() => {
-            // 处理筛选逻辑
-          }} className="p-2 rounded-lg hover:bg-white/10"><SlidersHorizontal /></button>
+      <div className="sticky top-[70px] z-40 bg-brand-primary/80 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-lg">
+        <div className="flex justify-between items-center">
+          <p className="text-brand-muted text-sm">共找到 <span className="font-semibold text-white">{filteredBooks.length}</span> 本书</p>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setViewMode('grid')} className={clsx('p-2 rounded-lg', viewMode === 'grid' ? 'bg-brand-accent text-brand-primary' : 'hover:bg-white/10')}><Grid size={20} /></button>
+            <button onClick={() => setViewMode('list')} className={clsx('p-2 rounded-lg', viewMode === 'list' ? 'bg-brand-accent text-brand-primary' : 'hover:bg-white/10')}><List size={20} /></button>
+            <button onClick={() => setShowFilters(!showFilters)} className="p-2 rounded-lg hover:bg-white/10"><SlidersHorizontal size={20} /></button>
+          </div>
         </div>
       </div>
       
-      {/* Books Grid/List */}
-      <div className={clsx('transition-all duration-500', 
-        viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"
+      {showFilters && (
+        <div className="p-6 bg-brand-secondary/50 backdrop-blur-sm rounded-2xl border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-brand-muted mb-2">分类筛选</label>
+              <div className="space-y-2">
+                <button
+                  onClick={() => onFiltersChange({ ...searchFilters, category: undefined })}
+                  className={clsx(
+                    'block w-full text-left px-3 py-2 rounded-lg text-sm',
+                    !searchFilters.category 
+                      ? 'bg-brand-accent text-brand-primary' 
+                      : 'text-brand-muted hover:bg-white/10'
+                  )}
+                >
+                  全部分类
+                </button>
+                {categories.map(category => (
+                  <button
+                    key={category}
+                    onClick={() => onFiltersChange({ ...searchFilters, category })}
+                    className={clsx(
+                      'block w-full text-left px-3 py-2 rounded-lg text-sm',
+                      searchFilters.category === category
+                        ? 'bg-brand-accent text-brand-primary'
+                        : 'text-brand-muted hover:bg-white/10'
+                    )}
+                  >
+                    {categoryLabels[category]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div className={clsx(
+        viewMode === 'grid'
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          : "flex flex-col gap-4"
       )}>
         {filteredBooks.map(book => (
-          <BookCard 
-            key={book.id} 
-            book={book} 
-            onChatClick={onChatClick} 
-            onDetailsClick={onDetailsClick} 
+          <BookCard
+            key={book.id}
+            book={book}
+            viewMode={viewMode}
+            onChatClick={onChatClick}
+            onDetailsClick={onDetailsClick}
             isFavorite={favoriteBooks.includes(book.id)}
             onToggleFavorite={handleToggleFavorite}
           />
