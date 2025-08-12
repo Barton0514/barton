@@ -38,14 +38,14 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
       {/* Back Button */}
       <button
         onClick={onBack}
-        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors"
+        className="flex items-center space-x-2 text-brand-muted hover:text-brand-primary mb-8 transition-colors"
       >
         <ArrowLeft className="h-5 w-5" />
         <span>返回书籍列表</span>
       </button>
 
       {/* Book Header */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+      <div className="bg-white rounded-xl shadow-interactive overflow-hidden mb-8">
         <div className="lg:flex">
           <div className="lg:w-1/3 p-8">
             <img
@@ -116,8 +116,14 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={() => onChatClick(book)}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+                  onClick={() => {
+                    if (book.difyChatUrl) {
+                      window.open(book.difyChatUrl, '_blank', 'noopener,noreferrer');
+                    } else {
+                      onChatClick(book);
+                    }
+                  }}
+                  className="flex-1 bg-brand-primary hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
                 >
                   <MessageCircle className="h-5 w-5" />
                   <span>与作者对话</span>
@@ -133,7 +139,7 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl shadow-interactive overflow-hidden">
         <div className="border-b border-gray-200">
           <nav className="flex">
             {tabs.map((tab) => {
@@ -144,7 +150,7 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium transition-colors ${
                     activeTab === tab.id
-                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      ? 'text-brand-primary border-b-2 border-brand-accent'
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -218,8 +224,14 @@ const BookDetail: React.FC<BookDetailProps> = ({ book, onBack, onChatClick }) =>
                     {book.authorBio}
                   </p>
                   <button
-                    onClick={() => onChatClick(book)}
-                    className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+                    onClick={() => {
+                      if (book.difyChatUrl) {
+                        window.open(book.difyChatUrl, '_blank', 'noopener,noreferrer');
+                      } else {
+                        onChatClick(book);
+                      }
+                    }}
+                    className="mt-4 bg-brand-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
                   >
                     <MessageCircle className="h-4 w-4" />
                     <span>与作者对话</span>

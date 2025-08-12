@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
   };
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
+    <header className="bg-white shadow-subtle sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
               <input
                 type="text"
                 placeholder="搜索书籍、作者或关键词..."
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-brand-accent focus:border-transparent"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
                 </button>
                 <button
                   onClick={onRegisterClick}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                  className="bg-brand-accent text-brand-primary hover:bg-yellow-400 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                 >
                   注册
                 </button>
@@ -141,7 +141,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
                       onRegisterClick();
                       setIsMenuOpen(false);
                     }}
-                    className="block w-full text-left px-3 py-2 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+                    className="block w-full text-left px-3 py-2 text-base font-medium text-brand-primary bg-brand-accent hover:bg-yellow-400 rounded-md"
                   >
                     注册
                   </button>

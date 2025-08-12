@@ -27,13 +27,17 @@ const BookCard: React.FC<BookCardProps> = ({
 
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onChatClick(book);
+    if (book.difyChatUrl) {
+      window.open(book.difyChatUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      onChatClick(book);
+    }
   };
 
   if (viewMode === 'list') {
     return (
       <div 
-        className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 hover:border-blue-300"
+        className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-transparent hover:border-brand-accent/50"
         onClick={() => onDetailsClick(book)}
       >
         <div className="flex p-6">
@@ -47,10 +51,10 @@ const BookCard: React.FC<BookCardProps> = ({
           <div className="ml-6 flex-1">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+                <h3 className="text-xl font-bold text-brand-primary mb-2 hover:text-blue-600 transition-colors">
                   {book.title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-2">作者：{book.author}</p>
+                <p className="text-sm text-brand-muted mb-2">作者：{book.author}</p>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-3">
                   {categoryLabels[book.category]}
                 </span>
@@ -71,7 +75,7 @@ const BookCard: React.FC<BookCardProps> = ({
                 </button>
                 <button
                   onClick={handleChatClick}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+                  className="bg-brand-primary hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
                 >
                   <MessageCircle className="h-4 w-4" />
                   <span>对话</span>
@@ -112,7 +116,7 @@ const BookCard: React.FC<BookCardProps> = ({
 
   return (
     <div 
-      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-200 hover:border-blue-300"
+      className="bg-white rounded-xl shadow-subtle hover:shadow-interactive transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group border border-transparent hover:border-brand-accent/50"
       onClick={() => onDetailsClick(book)}
     >
       <div className="relative">
@@ -141,10 +145,10 @@ const BookCard: React.FC<BookCardProps> = ({
       </div>
       
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+        <h3 className="text-lg font-bold text-brand-primary mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
           {book.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-3">作者：{book.author}</p>
+        <p className="text-sm text-brand-muted mb-3">作者：{book.author}</p>
         <p className="text-gray-700 text-sm leading-relaxed line-clamp-3 mb-4">
           {book.description}
         </p>
@@ -173,7 +177,7 @@ const BookCard: React.FC<BookCardProps> = ({
         
         <button
           onClick={handleChatClick}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-2"
+          className="w-full bg-brand-primary hover:bg-gray-800 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-2"
         >
           <MessageCircle className="h-4 w-4" />
           <span>与作者对话</span>

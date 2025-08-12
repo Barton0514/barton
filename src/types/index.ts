@@ -13,6 +13,7 @@ export interface Book {
   tags: string[];
   authorBio: string;
   tableOfContents: string[];
+  difyChatUrl?: string;
 }
 
 export interface User {

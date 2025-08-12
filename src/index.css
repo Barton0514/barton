@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-gray-100 antialiased; /* 使用更柔和的灰色背景和抗锯齿渲染 */
+}

@@ -81,10 +81,10 @@ function AppContent() {
           />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-4xl font-extrabold text-brand-primary mb-2">
                 与书籍作者对话
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-brand-muted">
                 探索知识的深度，与大师级思想家进行虚拟对话
               </p>
             </div>
