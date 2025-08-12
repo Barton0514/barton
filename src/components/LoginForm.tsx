@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
 interface LoginFormProps {
@@ -33,12 +34,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSwitchToRegister }) =>
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+      <motion.div 
+        className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 w-full max-w-md"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
           <h2 className="text-xl font-semibold text-gray-900">登录账户</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100/50 rounded-lg transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -46,52 +53,58 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSwitchToRegister }) =>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50/80 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm backdrop-blur-sm">
               {error}
             </div>
           )}
 
-          <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm">
-            <p className="font-medium">演示账户信息：</p>
-            <p>邮箱：xiaoming@example.com</p>
-            <p>密码：password</p>
-          </div>
-
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               邮箱地址
             </label>
             <input
-              type="email"
               id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="请输入邮箱地址"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white/50 backdrop-blur-sm"
+              placeholder="you@example.com"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-              密码
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                密码
+              </label>
+              <button
+                type="button"
+                className="text-sm text-brand-accent hover:text-yellow-600"
+              >
+                忘记密码？
+              </button>
+            </div>
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
                 id="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="请输入密码"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white/50 backdrop-blur-sm pr-12"
+                placeholder="••••••••"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-gray-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-400" />
+                )}
               </button>
             </div>
           </div>
@@ -99,24 +112,31 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClose, onSwitchToRegister }) =>
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
+            className="w-full bg-brand-accent text-brand-primary py-2 px-4 rounded-lg font-medium hover:bg-yellow-400 transition-colors flex items-center justify-center disabled:opacity-50"
           >
-            {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-            <span>{isLoading ? '登录中...' : '登录'}</span>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                登录中...
+              </>
+            ) : (
+              '登录'
+            )}
           </button>
+        </form>
 
-          <div className="text-center">
-            <span className="text-gray-600">还没有账户？</span>
+        <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-200/50 rounded-b-2xl backdrop-blur-sm">
+          <p className="text-center text-sm text-gray-600">
+            还没有账户？{' '}
             <button
-              type="button"
               onClick={onSwitchToRegister}
-              className="text-blue-600 hover:text-blue-700 font-medium ml-1"
+              className="font-medium text-brand-accent hover:text-yellow-600"
             >
               立即注册
             </button>
-          </div>
-        </form>
-      </div>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };

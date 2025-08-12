@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Edit3, Save, X, Heart, MessageSquare, Calendar, BookOpen } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useBooks } from '../hooks/useBooks';
 
@@ -39,175 +40,160 @@ const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+      <motion.div 
+        className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-gray-200/50">
           <h2 className="text-xl font-semibold text-gray-900">个人资料</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100/50 rounded-lg transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6">
           {/* Profile Header */}
-          <div className="flex items-center space-x-4">
-            <img
-              src={user.avatar}
-              alt={user.username}
-              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
-            />
-            <div className="flex-1">
-              {isEditing ? (
-                <div className="space-y-3">
+          <div className="flex items-center space-x-6 mb-8">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <User className="h-10 w-10 text-white" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900">{user.username}</h3>
+              <p className="text-gray-600">{user.email}</p>
+              <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                <span className="flex items-center">
+                  <Heart className="h-4 w-4 mr-1" />
+                  {favoriteBooks.length} 收藏
+                </span>
+                <span className="flex items-center">
+                  <MessageSquare className="h-4 w-4 mr-1" />
+                  {user.chatHistory.length} 对话
+                </span>
+                <span className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  {totalReadingTime} 天阅读
+                </span>
+              </div>
+            </div>
+            {!isEditing && (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="ml-auto flex items-center space-x-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-gray-700"
+              >
+                <Edit3 className="h-4 w-4" />
+                <span>编辑</span>
+              </button>
+            )}
+          </div>
+
+          {/* Edit Form */}
+          {isEditing && (
+            <div className="mb-8 p-6 bg-gray-50/50 rounded-xl backdrop-blur-sm">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">编辑资料</h4>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">用户名</label>
                   <input
                     type="text"
                     value={editData.username}
-                    onChange={(e) => setEditData(prev => ({ ...prev, username: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="用户名"
+                    onChange={(e) => setEditData({...editData, username: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white/50 backdrop-blur-sm"
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
                   <input
                     type="email"
                     value={editData.email}
-                    onChange={(e) => setEditData(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="邮箱地址"
+                    onChange={(e) => setEditData({...editData, email: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white/50 backdrop-blur-sm"
                   />
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={handleSave}
-                      className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <Save className="h-4 w-4" />
-                      <span>保存</span>
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="flex items-center space-x-2 px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                    >
-                      <X className="h-4 w-4" />
-                      <span>取消</span>
-                    </button>
-                  </div>
                 </div>
-              ) : (
-                <div>
-                  <h3 className="text-2xl font-semibold text-gray-900">{user.username}</h3>
-                  <p className="text-gray-600">{user.email}</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    加入时间：{user.joinDate.toLocaleDateString('zh-CN')}
-                  </p>
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="flex items-center space-x-2 mt-3 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  >
-                    <Edit3 className="h-4 w-4" />
-                    <span>编辑资料</span>
-                  </button>
-                </div>
-              )}
+              </div>
+              <div className="flex space-x-3 mt-4">
+                <button
+                  onClick={handleSave}
+                  className="flex items-center px-4 py-2 bg-brand-accent text-brand-primary rounded-lg hover:bg-yellow-400 transition-colors"
+                >
+                  <Save className="h-4 w-4 mr-1" />
+                  保存
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  取消
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Statistics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg text-center">
-              <Heart className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-blue-600">{user.favoriteBooks.length}</p>
-              <p className="text-sm text-gray-600">收藏书籍</p>
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+              <div className="flex items-center">
+                <div className="p-3 bg-blue-500 rounded-lg">
+                  <BookOpen className="h-6 w-6 text-white" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-2xl font-bold text-gray-900">{user.readingHistory.length}</p>
+                  <p className="text-gray-600">已读书籍</p>
+                </div>
+              </div>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg text-center">
-              <BookOpen className="h-6 w-6 text-green-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-green-600">{user.readingHistory.length}</p>
-              <p className="text-sm text-gray-600">阅读记录</p>
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
+              <div className="flex items-center">
+                <div className="p-3 bg-purple-500 rounded-lg">
+                  <Heart className="h-6 w-6 text-white" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-2xl font-bold text-gray-900">{favoriteBooks.length}</p>
+                  <p className="text-gray-600">收藏书籍</p>
+                </div>
+              </div>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg text-center">
-              <MessageSquare className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-purple-600">{user.chatHistory.length}</p>
-              <p className="text-sm text-gray-600">对话记录</p>
-            </div>
-            <div className="bg-orange-50 p-4 rounded-lg text-center">
-              <Calendar className="h-6 w-6 text-orange-600 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-orange-600">{totalReadingTime}</p>
-              <p className="text-sm text-gray-600">阅读天数</p>
+            <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200">
+              <div className="flex items-center">
+                <div className="p-3 bg-green-500 rounded-lg">
+                  <MessageSquare className="h-6 w-6 text-white" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-2xl font-bold text-gray-900">{user.chatHistory.length}</p>
+                  <p className="text-gray-600">对话次数</p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Favorite Books */}
-          <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">我的收藏</h4>
-            {favoriteBooks.length === 0 ? (
-              <p className="text-gray-600 text-center py-8">
-                还没有收藏任何书籍，快去发现好书吧！
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {favoriteBooks.map(book => book && (
-                  <div key={book.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+          {favoriteBooks.length > 0 && (
+            <div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-4">收藏的书籍</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {favoriteBooks.map(book => (
+                  <div key={book.id} className="flex items-center p-4 bg-white/50 rounded-lg border border-gray-200 backdrop-blur-sm">
                     <img
                       src={book.cover}
                       alt={book.title}
-                      className="w-12 h-16 object-cover rounded"
+                      className="w-12 h-16 object-cover rounded-md"
                     />
-                    <div className="flex-1 min-w-0">
-                      <h5 className="font-medium text-gray-900 truncate">{book.title}</h5>
+                    <div className="ml-4">
+                      <h5 className="font-medium text-gray-900 line-clamp-1">{book.title}</h5>
                       <p className="text-sm text-gray-600">{book.author}</p>
-                      <div className="flex items-center space-x-1 mt-1">
-                        <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                        <span className="text-xs text-gray-500">{book.rating}</span>
-                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Reading History */}
-          <div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-4">阅读历史</h4>
-            {user.readingHistory.length === 0 ? (
-              <p className="text-gray-600 text-center py-8">
-                还没有阅读记录，开始你的阅读之旅吧！
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {user.readingHistory.map(record => {
-                  const book = getBookById(record.bookId);
-                  if (!book) return null;
-                  
-                  return (
-                    <div key={record.bookId} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <img
-                        src={book.cover}
-                        alt={book.title}
-                        className="w-12 h-16 object-cover rounded"
-                      />
-                      <div className="flex-1">
-                        <h5 className="font-medium text-gray-900">{book.title}</h5>
-                        <p className="text-sm text-gray-600">{book.author}</p>
-                        <div className="flex items-center space-x-4 mt-2 text-xs text-gray-500">
-                          <span>开始：{record.startDate.toLocaleDateString('zh-CN')}</span>
-                          <span>最近：{record.lastReadDate.toLocaleDateString('zh-CN')}</span>
-                          <span>进度：{record.progress}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                          <div 
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${record.progress}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

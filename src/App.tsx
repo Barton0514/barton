@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Book, SearchFilters } from './types';
 import { AuthProvider } from './context/AuthContext';
 import { useBooks } from './hooks/useBooks';
@@ -30,6 +31,15 @@ function AppContent() {
     }
   }, [theme]);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      document.body.style.setProperty('--x', `${e.clientX}px`);
+      document.body.style.setProperty('--y', `${e.clientY}px`);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const { books, loading, error } = useBooks();
 
   const handleBookDetails = (book: Book) => {
@@ -49,6 +59,12 @@ function AppContent() {
 
   const handleSearchChange = (query: string) => {
     setSearchFilters(prev => ({ ...prev, query }));
+  };
+
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    in: { opacity: 1, y: 0 },
+    out: { opacity: 0, y: -20 },
   };
 
   if (loading) {
@@ -82,75 +98,120 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {viewMode === 'list' && (
-        <>
-          <Header 
-            onSearchChange={handleSearchChange}
-            onLoginClick={() => setShowLoginForm(true)}
-            onRegisterClick={() => setShowRegisterForm(true)}
-            theme={theme}
-            onThemeChange={setTheme}
-          />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="text-center p-8 mb-8 rounded-2xl">
-              <h1 className="text-5xl font-extrabold text-brand-primary mb-3">
-                与书籍作者对话
-              </h1>
-              <p className="text-xl text-brand-muted">
-                探索知识的深度，与大师级思想家进行虚拟对话
-              </p>
-            </div>
-            
-            <BookList
-              books={books}
-              onChatClick={handleChatClick}
-              onDetailsClick={handleBookDetails}
-              searchFilters={searchFilters}
-              onFiltersChange={setSearchFilters}
+      <AnimatePresence>
+        {viewMode === 'list' && (
+          <motion.div
+            key="list"
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={{ duration: 0.3 }}
+          >
+            <Header 
+              onSearchChange={handleSearchChange}
+              onLoginClick={() => setShowLoginForm(true)}
+              onRegisterClick={() => setShowRegisterForm(true)}
+              theme={theme}
+              onThemeChange={setTheme}
             />
-          </main>
-        </>
-      )}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <div className="text-center p-8 mb-8 rounded-2xl">
+                <h1 className="text-5xl font-extrabold text-brand-primary mb-3">
+                  与书籍作者对话
+                </h1>
+                <p className="text-xl text-brand-muted">
+                  探索知识的深度，与大师级思想家进行虚拟对话
+                </p>
+              </div>
+              
+              <BookList
+                books={books}
+                onChatClick={handleChatClick}
+                onDetailsClick={handleBookDetails}
+                searchFilters={searchFilters}
+                onFiltersChange={setSearchFilters}
+              />
+            </main>
+          </motion.div>
+        )}
 
-      {viewMode === 'detail' && selectedBook && (
-        <BookDetail
-          book={selectedBook}
-          onBack={handleBackToList}
-          onChatClick={handleChatClick}
-        />
-      )}
+        {viewMode === 'detail' && selectedBook && (
+          <motion.div
+            key="detail"
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={{ duration: 0.3 }}
+          >
+            <BookDetail
+              book={selectedBook}
+              onBack={handleBackToList}
+              onChatClick={handleChatClick}
+            />
+          </motion.div>
+        )}
 
-      {viewMode === 'chat' && selectedBook && (
-        <ChatInterface
-          book={selectedBook}
-          onBack={handleBackToList}
-        />
-      )}
+        {viewMode === 'chat' && selectedBook && (
+          <motion.div
+            key="chat"
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={{ duration: 0.3 }}
+          >
+            <ChatInterface
+              book={selectedBook}
+              onBack={handleBackToList}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Modals */}
-      {showLoginForm && (
-        <LoginForm
-          onClose={() => setShowLoginForm(false)}
-          onSwitchToRegister={() => {
-            setShowLoginForm(false);
-            setShowRegisterForm(true);
-          }}
-        />
-      )}
-
-      {showRegisterForm && (
-        <RegisterForm
-          onClose={() => setShowRegisterForm(false)}
-          onSwitchToLogin={() => {
-            setShowRegisterForm(false);
-            setShowLoginForm(true);
-          }}
-        />
-      )}
-
-      {showUserProfile && (
-        <UserProfile onClose={() => setShowUserProfile(false)} />
-      )}
+      {/* Modals with animation */}
+      <AnimatePresence>
+        {showLoginForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <LoginForm
+              onClose={() => setShowLoginForm(false)}
+              onSwitchToRegister={() => {
+                setShowLoginForm(false);
+                setShowRegisterForm(true);
+              }}
+            />
+          </motion.div>
+        )}
+        {showRegisterForm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <RegisterForm
+              onClose={() => setShowRegisterForm(false)}
+              onSwitchToLogin={() => {
+                setShowRegisterForm(false);
+                setShowLoginForm(true);
+              }}
+            />
+          </motion.div>
+        )}
+        {showUserProfile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <UserProfile onClose={() => setShowUserProfile(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
