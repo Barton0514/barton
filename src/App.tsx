@@ -80,8 +80,8 @@ function AppContent() {
             onRegisterClick={() => setShowRegisterForm(true)}
           />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-              <h1 className="text-4xl font-extrabold text-brand-primary mb-2">
+            <div className="text-center p-8 mb-8 bg-gradient-to-r from-gray-900 via-brand-primary to-gray-900 rounded-2xl shadow-lg">
+              <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-brand-accent mb-3">
                 与书籍作者对话
               </h1>
               <p className="text-xl text-brand-muted">

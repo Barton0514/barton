@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
   };
 
   return (
-    <header className="bg-white shadow-subtle sticky top-0 z-50">
+    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
               <input
                 type="text"
                 placeholder="搜索书籍、作者或关键词..."
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-brand-accent focus:border-transparent"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white/80 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-brand-accent focus:border-transparent backdrop-blur-sm"
                 value={searchQuery}
                 onChange={handleSearchChange}
               />
@@ -108,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({ onSearchChange, onLoginClick, onRegiste
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 border-white/20">
               {isAuthenticated ? (
                 <div className="flex items-center space-x-3 px-3 py-2">
                   <img
